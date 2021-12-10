@@ -8,7 +8,7 @@ import (
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 
-	_ "github.com/nikolaevfo/todo-list-service-Golang/docs"
+	_ "to-do-list/docs"
 )
 
 type Handler struct {
