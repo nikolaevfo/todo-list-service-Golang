@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"os"
+	// "os"
 	todo "to-do-list"
 	"to-do-list/pkg/handler"
 	"to-do-list/pkg/repository"
