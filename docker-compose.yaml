@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: 111111
+      POSTGRES_DB: "postgres"
+      POSTGRES_ROOT_PASSWORD: 111111
+
+
+  app:
+    build: ./
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    restart: always

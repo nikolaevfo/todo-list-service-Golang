@@ -11,21 +11,30 @@ import (
 	_ "to-do-list/docs"
 )
 
+// структура handlers использует
 type Handler struct {
 	services *service.Service
 }
 
+// метод для инициализации из main.go
 func NewHandler(services *service.Service) *Handler {
 	return &Handler{services: services}
 }
 
+// Метод запускается из main.go и инициализирует все endpoints.
+// Для разработки API применяется фреймворк для golang - gin.
 func (h *Handler) InitRoutes() *gin.Engine {
+	// инициализация роутера
 	router := gin.New()
 
-	// подключаем сваггер к джину?
-
+	// подключаем swagger к роутеру
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// Прописываем endpoints к обработчикам текущего модуля handler:
+	// в файлах с соответствующими именами в текущей папке:
+	// auth.go, item.go, list.go.
+	// Обработчики во фреймворке gin приниают в качестве параметра
+	// указатель - *gin.Context.
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", h.signUp)

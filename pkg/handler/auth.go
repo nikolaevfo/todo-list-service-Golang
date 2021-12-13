@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// описываем данные для swagger
 // @Summary      signUp
 // @Description  create account
 // @Tags         auth
