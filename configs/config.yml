@@ -1,7 +1,7 @@
 port: "8000"
 
 db: {
-  host: "db",
+  host: "database",
   port: "5432",
   username: "postgres",
   dbname: "postgres",

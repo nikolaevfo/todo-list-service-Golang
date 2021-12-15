@@ -27,18 +27,22 @@ import (
 // @name Authorization
 
 func main() {
+	// устанавливаем формат вывода для логгера
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
-	// запускаем работу viper, для чтения файла config/config.yml
+	// инициализация кофигурационного файла с помощью viper
 	if err := initConfig(); err != nil {
 		logrus.Fatalf("error initalizing configs: %s", err.Error())
 	}
 
-	// применяется godotenv для чтения данных из файла .env
+	// применяется godotenv для чтения пароля из файла .env
 	if err := godotenv.Load(); err != nil {
 		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 
+	// инициализируем базу данных с помощью метода из модуля repository
+	// используем конфигурациооный файл с помощью viper
+	// используем переменную окруженя для получения пароля с помощью godotenv
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
@@ -52,7 +56,10 @@ func main() {
 		logrus.Fatal("failed to initialize db: %s", err.Error())
 	}
 
-	// создаем экземпляры основных объектов
+	// Создаем экземпляры основных объектов и объявляем зависимости в нужном порядке
+	// repos зависит от базы данных
+	// services зависит от repos
+	// handlers зависит от services
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
@@ -71,7 +78,7 @@ func main() {
 	}
 }
 
-//
+// инициализируем конфигурационные файлы с помощью viper
 func initConfig() error {
 	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")

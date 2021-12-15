@@ -23,20 +23,25 @@ import (
 func (h *Handler) signUp(c *gin.Context) {
 	var input todo.User
 
-	// байндим входные данные
+	// байндим входные данные в соответствии со структурой todo.User
 	if err := c.BindJSON(&input); err != nil {
+		// вызываем созданную нами функцию обработки ошибок (код статуса 400)
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	// вызываем авторизацию если ошибка, пишем код 500, здесь в ответ должен придти id
+	// передаем данные на слой ниже, в сервис
+	// вызываем сервис авторизации
+	// передаем тело запрсоа. в ответ должен придти id
 	id, err := h.services.Authorization.CreateUser(input)
 	if err != nil {
+		// обрабатываем ошибку, возвращаем код 500.
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	// записываем в ответ статус код 200, если все ок
+	// и тело json со значением id пользователя
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"id": id,
 	})

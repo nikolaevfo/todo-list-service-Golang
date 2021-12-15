@@ -11,12 +11,13 @@ import (
 	_ "to-do-list/docs"
 )
 
-// структура handlers использует
+// Структура handlers использует указатель на service (внедрение зависимостей)
+// В конструкторе мы внедряем зависимость от service
 type Handler struct {
 	services *service.Service
 }
 
-// метод для инициализации из main.go
+// метод для инициализации, используется в main.go
 func NewHandler(services *service.Service) *Handler {
 	return &Handler{services: services}
 }

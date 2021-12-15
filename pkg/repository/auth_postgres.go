@@ -9,20 +9,27 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// описываем структуру репозитория для работы с авторизацией
 type AuthPostgres struct {
 	db *sqlx.DB
 }
 
+// описываем метод инициализации репозитория авторизации
 func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
+// описываем метод, работающий с базой данных
 func (r *AuthPostgres) CreateUser(user todo.User) (int, error) {
 	var id int
-	// запрос к базе данных???, $1 плейсхолдеры
+
+	// осуществим запрос к базе данных, используя функцию для форматирования строк из fmt
+	// используем метод INSERT для добавления в usersTable, возвращаем id
+	// в плейсхолдеры $1, $2, $3 подставятся значения аргументов метода QueryRow, начиная со 2-го
 	query := fmt.Sprintf("INSERT INTO %s (name, username, password_hash) values ($1, $2, $3) RETURNING id", usersTable)
 	row := r.db.QueryRow(query, user.Name, user.Username, user.Password)
 
+	// с помощью метода Scan записываем значение id в переменную
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}

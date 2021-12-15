@@ -5,7 +5,13 @@ import (
 	"to-do-list/pkg/repository"
 )
 
+// Интерфейсы называем исходя из их доменной зоны бизнес-логики.
+// Создаем объединяющую структуру Service, и объявим ее конструктор.
+// Сервисы обращаются к базе данных, поэтому конструктор принимает указатель на структуру repository.
+// Это и есть внедрение зависимостей
+
 type Authorization interface {
+	// метод принимает данные о пользователе, возвращает id и ошибку
 	CreateUser(user todo.User) (int, error)
 	GenerateToken(username, password string) (string, error)
 	ParseToken(token string) (int, error)
@@ -25,15 +31,19 @@ type TodoItem interface {
 	DeleteItem(userId, itemId int) error
 }
 
+// описываем струтуру сервиса, состоящую из интерфейсов
 type Service struct {
 	Authorization
 	TodoList
 	TodoItem
 }
 
+// конструктор сервиса, в котором инициализируются сервисы авторизации,
+// сервисы работы со списками и задачами
+// данные уходят на слой ниже, в repository
 func NewService(repos *repository.Repository) *Service {
+	// инициализация сервиса
 	return &Service{
-		// инициализация новых репозиториев
 		Authorization: NewAuthService(repos.Authorization),
 		TodoList:      NewTodoListSevice(repos.TodoList),
 		TodoItem:      newTodoItemService(repos.TodoItem, repos.TodoList),
