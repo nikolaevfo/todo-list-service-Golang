@@ -59,17 +59,4 @@ repository - для работы с БД
 - осуществить миграцию (должна быть установлена утилита migrate):
   migrate -path ./schema -database 'postgres://postgres:111111@localhost:5432/postgres?sslmode=disable' up
 
-### Что планируется улучшить:
-
 ### Развёртывание:
-
-- Клонировать репозиторий командой
-
-```
-git clone https://github.com/nikolaevfo/elma-test-work.git
-```
-
-- Установить сторонние библиотеки командой npm i
-- Запустить вертуальный сервер командой npm run dev
-- Для финальной сборки введите команду npm run build
-- Для работы с проектом у вас должен быть установлен Node.js - https://nodejs.org/en/download/
