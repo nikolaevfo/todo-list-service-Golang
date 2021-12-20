@@ -38,6 +38,8 @@ type UpdateListInput struct {
 	Description *string `json:"description"`
 }
 
+// метод валидации данных запроса на nil
+// используется в сервисе todo_list.go
 func (i UpdateListInput) Validate() error {
 	if i.Title == nil && i.Description == nil {
 		return errors.New("update structure has no values")
@@ -52,6 +54,8 @@ type UpdateItemInput struct {
 	Done        *bool   `json:"done"`
 }
 
+// метод валидации данных запроса на nil
+// используется в сервисе todo_item.go
 func (i UpdateItemInput) Validate() error {
 	if i.Title == nil && i.Description == nil && i.Done == nil {
 		return errors.New("update structure has no values")

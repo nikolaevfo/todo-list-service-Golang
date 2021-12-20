@@ -5,10 +5,14 @@ import (
 	"to-do-list/pkg/repository"
 )
 
+// Методы сервиса вызывают соответствующие методы из модуля repository,
+// передаем данные на уровень ниже
+
 type TodoListService struct {
 	repo repository.TodoList
 }
 
+// конструктор для создания сервиса по работе со списками
 func NewTodoListSevice(repo repository.TodoList) *TodoListService {
 	return &TodoListService{repo: repo}
 }
@@ -30,6 +34,7 @@ func (s *TodoListService) DeleteList(userId, listId int) error {
 }
 
 func (s *TodoListService) UpdateList(userId, listId int, input todo.UpdateListInput) error {
+	// валидируем данные запроса на nil
 	if err := input.Validate(); err != nil {
 		return err
 	}

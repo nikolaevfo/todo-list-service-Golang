@@ -7,6 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// обработчики построены по одному принципу в следующем порядке:
+// приводим id пользователя из контекста в типу Int методом GetUserId
+// байндим json в соответствующую структуру из todo.go
+// вызываем метод сервиса, передаем в него полученную структуру с данными запроса
+// записываем в ответ полученные данные из сервиса
+
 // описываем данные для swagger
 // @Summary      signUp
 // @Description  create account
@@ -21,6 +27,7 @@ import (
 // @Failure      default  {object}  errorResponse
 // @Router       /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
+	// структура инпута для парсинга из json
 	var input todo.User
 
 	// байндим входные данные в соответствии со структурой todo.User
@@ -47,11 +54,15 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
+// структура для парсинга тела запроса из json
 type signInInput struct {
 	Username string `json: "username" binding:"required"`
 	Password string `json: "password" binding:"required"`
 }
 
+// метод signIn будет возвращать токен, если пользоватьель найден в БД
+//
+// описываем данные для swagger
 // @Summary      signIn
 // @Description  login
 // @Tags         auth
@@ -73,14 +84,14 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	// вызываем авторизацию если ошибка, пишем код 500, здесь в ответ должен придти id
+	// вызываем метод создания токена, если ошибка, пишем код 500
 	token, err := h.services.Authorization.GenerateToken(input.Username, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// записываем в ответ статус код 200, если все ок
+	// записываем в ответ статус код 200, если все ок, и токен
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": token,
 	})

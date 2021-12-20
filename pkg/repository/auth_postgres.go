@@ -14,7 +14,7 @@ type AuthPostgres struct {
 	db *sqlx.DB
 }
 
-// описываем метод инициализации репозитория авторизации
+// создаем конструктор репозитория авторизации
 func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
@@ -36,9 +36,15 @@ func (r *AuthPostgres) CreateUser(user todo.User) (int, error) {
 	return id, nil
 }
 
+// метод для получения user при проверке токена
 func (r *AuthPostgres) GetUser(username, password string) (todo.User, error) {
+	// объявим структуру, в которую будем записывать результат
 	var user todo.User
+
+	// описываем запрос к БД
 	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
+
+	// делаем запрос к БД, записываем в user
 	err := r.db.Get(&user, query, username, password)
 
 	return user, err

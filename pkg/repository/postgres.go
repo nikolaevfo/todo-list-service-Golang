@@ -28,6 +28,7 @@ type Config struct {
 	SSLMode  string
 }
 
+// описываем конструктор для инициализации БД
 func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	// запуск БД
 	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",

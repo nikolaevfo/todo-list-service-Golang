@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// обработчики построены по одному принципу в следующем порядке:
+// приводим id пользователя из контекста в типу Int методом GetUserId
+// байндим json в соответствующую структуру из todo.go
+// вызываем метод сервиса, передаем в него полученную структуру с данными запроса
+// записываем в ответ полученные данные из сервиса
+
+// описываем данные для swagger
 // @Summary      Create Item
 // @Security ApiKeyAuth
 // @Description  create item
@@ -51,6 +58,7 @@ func (h *Handler) createItem(c *gin.Context) {
 	})
 }
 
+// описываем данные для swagger
 // @Summary      Get All Items
 // @Security ApiKeyAuth
 // @Description  get all items
@@ -85,6 +93,7 @@ func (h *Handler) getAllItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
+// описываем данные для swagger
 // @Summary      Get Item By Id
 // @Security ApiKeyAuth
 // @Description  get item by id
@@ -119,6 +128,7 @@ func (h *Handler) getItemById(c *gin.Context) {
 	c.JSON(http.StatusOK, item)
 }
 
+// описываем данные для swagger
 // @Summary      Update Item
 // @Security ApiKeyAuth
 // @Description  update item
@@ -161,6 +171,7 @@ func (h *Handler) updateItem(c *gin.Context) {
 	})
 }
 
+// описываем данные для swagger
 // @Summary      Delete Item
 // @Security ApiKeyAuth
 // @Description  delete item

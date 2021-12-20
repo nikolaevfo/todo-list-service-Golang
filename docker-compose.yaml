@@ -21,8 +21,7 @@ services:
   
 
   app:
-    # image: nikolaevfo/todo-app
-    build: ./
+    image: gitint.elewise.com:5050/elma365-projects/hard-code/todo-list-service
     depends_on:
       - db
     ports:

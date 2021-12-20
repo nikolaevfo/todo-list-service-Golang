@@ -42,6 +42,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-in", h.signIn)
 	}
 
+	// используем мидлвару для проверки аутентификации
+	// и добавления id пользователя в контекст запроса
 	api := router.Group("/api", h.userIdentity)
 	{
 		lists := api.Group("/lists")

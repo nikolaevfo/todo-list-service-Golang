@@ -10,7 +10,6 @@ import (
 // Создаем объединяющую структуру Repository, и объявим ее конструктор.
 // Repository работает непосредственно с базой данных, поэтому конструктор принимает указатель на структуру - *sqlx.DB.
 // Это внедрение зависимостей
-
 type Authorization interface {
 	CreateUser(user todo.User) (int, error)
 	GetUser(username, password string) (todo.User, error)

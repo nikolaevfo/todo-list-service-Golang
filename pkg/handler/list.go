@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// обработчики построены по одному принципу в следующем порядке:
+// приводим id пользователя из контекста в типу Int методом GetUserId
+// байндим json в соответствующую структуру из todo.go
+// вызываем метод сервиса, передаем в него полученную структуру с данными запроса
+// записываем в ответ полученные данные из сервиса
+
+// описываем данные для swagger
 // @Summary      Create Todo List
 // @Security ApiKeyAuth
 // @Description  create todo list
@@ -27,7 +34,9 @@ func (h *Handler) createList(c *gin.Context) {
 		return
 	}
 
-	// структурные теги в todo.go позволят создать json, так как в полях структур названия полей должны быть с заглавной буквы, иначе будут неэкспортируемы
+	// структурные теги в todo.go позволят создать json,
+	// так как в полях структур названия полей должны быть с заглавной буквы,
+	// иначе будут неэкспортируемы
 	var input todo.TodoList
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -36,7 +45,7 @@ func (h *Handler) createList(c *gin.Context) {
 
 	id, err := h.services.TodoList.Create(userId, input)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -45,10 +54,12 @@ func (h *Handler) createList(c *gin.Context) {
 	})
 }
 
+// дополнительная структура для ответа
 type getAllListsResponse struct {
 	Data []todo.TodoList `json:"data"`
 }
 
+// описываем данные для swagger
 // @Summary      Get All Lists
 // @Security ApiKeyAuth
 // @Description  get all lists
@@ -79,6 +90,7 @@ func (h *Handler) getAllLists(c *gin.Context) {
 	})
 }
 
+// описываем данные для swagger
 // @Summary      Get List By Id
 // @Security ApiKeyAuth
 // @Description  get list by id
@@ -97,7 +109,9 @@ func (h *Handler) getListById(c *gin.Context) {
 		return
 	}
 
-	// получаем id листа из строки запроса
+	// получаем динамический id листа из строки запроса
+	// с помощью метода Param
+	// strconv.Atoi преобразует строку в число
 	listId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
@@ -114,6 +128,7 @@ func (h *Handler) getListById(c *gin.Context) {
 	c.JSON(http.StatusOK, list)
 }
 
+// описываем данные для swagger
 // @Summary      Update List
 // @Security ApiKeyAuth
 // @Description  update list
@@ -156,6 +171,7 @@ func (h *Handler) updateList(c *gin.Context) {
 	})
 }
 
+// описываем данные для swagger
 // @Summary      Delete List
 // @Security ApiKeyAuth
 // @Description  delete list

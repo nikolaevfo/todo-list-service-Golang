@@ -5,19 +5,26 @@ import (
 	"to-do-list/pkg/repository"
 )
 
+// Методы сервиса вызывают соответствующие методы из модуля repository,
+// передаем данные на уровень ниже
+
+// структура сервиса по работе с задачами
+// содержит два репозитория, для связи задач с их списками
 type TodoItemService struct {
 	repo     repository.TodoItem
 	listRepo repository.TodoList
 }
 
+// конструктор для создания сервиса по работе с задачами
 func newTodoItemService(repo repository.TodoItem, listRepo repository.TodoList) *TodoItemService {
 	return &TodoItemService{repo: repo, listRepo: listRepo}
 }
 
 func (s *TodoItemService) CreateItem(userId, listId int, item todo.TodoItem) (int, error) {
+	// осуществляем проверку на наличие соотвтетствующего списка
 	_, err := s.listRepo.GetById(userId, listId)
 	if err != nil {
-		// лист не существует
+		// если лист не существует
 		return 0, err
 	}
 
